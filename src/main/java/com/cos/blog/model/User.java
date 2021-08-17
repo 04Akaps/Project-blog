@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Entity
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +31,8 @@ public class User {
     @Column(nullable = false, length = 100)
     private String email;
 
-
-    @Enumerated(EnumType.STRING)    //DB에는 RoleType가 없기 떄문에 String이라고 표기를 해주어야 한다.
+    @Enumerated(EnumType.STRING)        //DB안에는 RoleType이 없기 떄문에 String이라는것을 알려주어야 한다.
     private RoleType role;
-    //    직접 값을 넣어야할떄에는 user.setRole(RoleType.USER) 같이 넣어주면 된다.
 
    @CreationTimestamp
     private Timestamp createDate;
