@@ -18,9 +18,18 @@ import java.util.function.Supplier;
 
 @RestController
 public class DummyControllerTest {
+    //http://localhost:8080/blog
 
     @Autowired
     private UserRepository userRepository;
+
+    @PostMapping("/dummy/join2")
+    public String join2(User user){
+        user.setRole(RoleType.USER);
+
+        userRepository.save(user);
+        return"회원가입 완료";
+    }
 
     @DeleteMapping("/dummy/user/{id}")
     public String delete(@PathVariable int id){
@@ -29,18 +38,17 @@ public class DummyControllerTest {
         }catch (EmptyResultDataAccessException e){
             return "해당 id는 DB에 없는 값 입니다.";
         }
-        return id + " 가 삭제 되었습니다. ";
+        return "삭제 완료";
     }
 
-    // update를 해야하기 떄문에 Put으로 받게 된다.
     @PutMapping("/dummy/user/{id}")
-     @Transactional  // 트렌젝셔널을 사용하면 save를 따로 하지 않아도 된다 == 더티 체킹
+    @Transactional
     public String updateUser(@PathVariable int id, @RequestBody User requestUser){
 
         User user = userRepository.findById(id).orElseThrow(null);
         user.setPassword(requestUser.getPassword());
         user.setEmail(requestUser.getEmail());
-        // userRepository.save(user);
+
         return "업데이트 완료";
     }
 
@@ -51,9 +59,6 @@ public class DummyControllerTest {
 
     @GetMapping("/dummy/user/page")
     public List<User> pageList(@PageableDefault(size=2, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
-    //  1번
-       //  Page<User> users = userRepository.findAll(pageable);
-     // 2번
         List<User> users = userRepository.findAll(pageable).getContent();
         return users;
     }
@@ -68,20 +73,6 @@ public class DummyControllerTest {
             }
         });
         return user;
-    }
-
-
-    //http://localhost:8080/blog/dummy/join (요청)
-    // http의 body에 아래 변수3개의 데이터를 가지고 요청
-    @PostMapping("/dummy/join2")
-    public String join2(User user){
-        System.out.println("username : " + user.getUsername());
-        System.out.println("password : " + user.getPassword());
-        System.out.println("email : " + user.getEmail());
-        user.setRole(RoleType.USER);
-
-        userRepository.save(user);
-        return"회원가입 완료";
     }
 
 }
