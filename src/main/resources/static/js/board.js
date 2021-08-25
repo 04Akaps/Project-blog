@@ -4,6 +4,9 @@ let index = {
         $("#btn-save").on("click", ()=>{
             this.save();
         });
+        $("#btn-delete").on("click", ()=>{
+            this.deleteId();
+        });
         $("#btn-update").on("click", ()=>{
             this.update();
         });
@@ -11,45 +14,57 @@ let index = {
 
     save:function (){
        let data = {
-           username:$("#username").val(),
-           password:$("#password").val(),
-           email:$("#email").val()
+           title:$("#title").val(),
+           content:$("#content").val(),
        };
        $.ajax({
            type : "POST",
-           url : "/auth/joinProc",
+           url : "/api/board",
            data: JSON.stringify(data),
            contentType: "application/json; charset=utf-8",
            dataType: "json"
        }).done(function (res){
-           alert("회원가입이 완료 되었습니다.");
+           alert("작성이 완료되었습니다.");
            location.href = "/";
        }).fail(function (err){
            alert(JSON.stringify(err));
        });
     },
 
-    update:function (){
-        let data = {
-            id:$("#id").val(),
-            password:$("#password").val(),
-            username:$("#username").val(),
-            email:$("#email").val()
-        };
+    deleteId:function (){
+        let id = $("#id").text();
         $.ajax({
-            type : "PUT",
-            url : "/user/update",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
+            type : "DELETE",
+            url : "/api/delete/" +id,
             dataType: "json"
         }).done(function (res){
-            alert("수정이 완료 되었습니다.");
+            alert("삭제가 완료 되었습니다.");
             location.href = "/";
         }).fail(function (err){
             alert(JSON.stringify(err));
         });
     },
 
+    update:function (){
+        let id = $("#id").val();
+
+        let data = {
+            title:$("#title").val(),
+            content:$("#content").val(),
+        };
+        $.ajax({
+            type : "PUT",
+            url : "/api/update/"+id,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(function (res){
+            alert("수정이 완료되었습니다.");
+            location.href = "/";
+        }).fail(function (err){
+            alert(JSON.stringify(err));
+        });
+    },
 }
 index.init();
 
