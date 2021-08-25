@@ -15,4 +15,6 @@ public class GlobalExceptionHandler {
         return new ResponseDto<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 
+
+
 }

@@ -1,9 +1,12 @@
 package com.cos.blog.service;
 
+import com.cos.blog.controller.dto.ReplyDto;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
+import com.cos.blog.repository.ReplyRepository;
 import com.cos.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +24,16 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
+
     @Transactional
     public void 글쓰기(Board board, User user){
         board.setCount(0);
         board.setUser(user);
-
 
         boardRepository.save(board);
     }
@@ -56,6 +64,24 @@ public class BoardService {
         board1.setTitle(board.getTitle());
         board1.setContent(board.getContent());
 
+    }
+
+    @Transactional
+    public void 댓글쓰기(ReplyDto replyDto){
+        Board board = boardRepository.findById(replyDto.getBoardId()).orElseThrow(()->{
+            return new IllegalArgumentException("board 아이디를 찾을수 없습니다.");
+        });
+        User user = userRepository.findById(replyDto.getUserId()).orElseThrow(()->{
+            return new IllegalArgumentException("user 아이디를 찾을수 없습니다.");
+        });
+
+        Reply reply = Reply.builder()
+                .user(user)
+                .board(board)
+                .content(replyDto.getContent())
+                .build();
+
+        replyRepository.save(reply);
     }
 
 }

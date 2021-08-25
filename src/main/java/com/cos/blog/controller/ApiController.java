@@ -2,8 +2,10 @@ package com.cos.blog.controller;
 
 import com.cos.blog.config.auth.PrincipalDetail;
 import com.cos.blog.config.auth.PrincipalDetailService;
+import com.cos.blog.controller.dto.ReplyDto;
 import com.cos.blog.controller.dto.ResponseDto;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +39,8 @@ public class ApiController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+
 
     @PostMapping("auth/joinProc")
     public ResponseDto<Integer> save(@RequestBody User user){
@@ -73,6 +78,14 @@ public class ApiController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
+
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @PostMapping("/api/board/{id}/reply")
+    public ResponseDto<Integer> replysave(@RequestBody ReplyDto replyDto){
+
+        boardService.댓글쓰기(replyDto);
 
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }

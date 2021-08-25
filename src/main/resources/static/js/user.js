@@ -22,8 +22,13 @@ let index = {
            contentType: "application/json; charset=utf-8",
            dataType: "json"
        }).done(function (res){
-           alert("회원가입이 완료 되었습니다.");
-           location.href = "/";
+           if(res.status == 500){
+               alert("회원가입에 실패하셨습니다.");
+           }else{
+               alert("회원가입이 완료 되었습니다.");
+               location.href = "/";
+           }
+
        }).fail(function (err){
            alert(JSON.stringify(err));
        });

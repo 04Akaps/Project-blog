@@ -31,6 +31,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -73,6 +74,8 @@ public class WebController {
         model.addAttribute("board", boardService.글상세보기(id));
         return "board/updateForm";
     }
+
+
 
     @GetMapping("/auth/joinform")
     public String joinForm(){
